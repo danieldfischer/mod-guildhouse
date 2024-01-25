@@ -156,7 +156,10 @@ public:
         if (has_gh)
         {
             AddGossipItemFor(player, GOSSIP_ICON_TABARD, "Teleport to Guild House", GOSSIP_SENDER_MAIN, 1);
-
+            if (sConfigMgr->GetOption<int32>("GuildstoneID", 0) > 0)
+            {
+                AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, "Buy Guild Stone", GOSSIP_SENDER_MAIN, 6, "Buy Guild Stone?", sConfigMgr->GetOption<int32>("GuildstoneCost", 1000000), false);
+            }
             // Only show "Sell" option if they have a guild house & have permission to sell it
             Guild *guild = sGuildMgr->GetGuildById(player->GetGuildId());
             Guild::Member const *memberMe = guild->GetMember(player->GetGUID());
@@ -195,6 +198,9 @@ public:
             posY = 16267.802f;
             posZ = 13.136777f;
             ori = 1.461173f;
+            break;
+        case 6:
+            player->AddItem(sConfigMgr->GetOption<int32>("GuildstoneID", 0), 1);
             break;
         case 5: // close
             CloseGossipMenuFor(player);
