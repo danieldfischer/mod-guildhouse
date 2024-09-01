@@ -36,27 +36,26 @@ public:
 
     struct GuildHouseSpawnerAI : public ScriptedAI
     {
-        GuildHouseSpawnerAI(Creature *creature) : ScriptedAI(creature) {}
+        GuildHouseSpawnerAI(Creature* creature) : ScriptedAI(creature) {}
 
-        void UpdateAI(uint32 /* diff */) override
+        void UpdateAI(uint32 /*diff*/) override
         {
             me->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
         }
     };
 
-    CreatureAI *
-    GetAI(Creature *creature) const override
+    CreatureAI* GetAI(Creature *creature) const override
     {
         return new GuildHouseSpawnerAI(creature);
     }
 
-    bool OnGossipHello(Player *player, Creature *creature) override
+    bool OnGossipHello(Player* player, Creature* creature) override
     {
-
         if (player->GetGuild())
         {
-            Guild *guild = sGuildMgr->GetGuildById(player->GetGuildId());
-            Guild::Member const *memberMe = guild->GetMember(player->GetGUID());
+            Guild* guild = sGuildMgr->GetGuildById(player->GetGuildId());
+            Guild::Member const* memberMe = guild->GetMember(player->GetGUID());
+
             if (!memberMe->IsRankNotLower(GuildHouseBuyRank))
             {
                 ChatHandler(player->GetSession()).PSendSysMessage("You are not authorized to make Guild House purchases.");
@@ -87,7 +86,7 @@ public:
         return true;
     }
 
-    bool OnGossipSelect(Player *player, Creature *m_creature, uint32, uint32 action) override
+    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*sender*/, uint32 action) override
     {
         uint32 cost;
         bool empty;
@@ -154,7 +153,7 @@ public:
                 if (empty)
                     AddGossipItemFor(player, GOSSIP_ICON_CHAT, "All Class Trainers hired", GOSSIP_SENDER_MAIN, 909);
                 AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Go Back!", GOSSIP_SENDER_MAIN, 909);
-                SendGossipMenuFor(player, DEFAULT_GOSSIP_MESSAGE, m_creature->GetGUID());
+                SendGossipMenuFor(player, DEFAULT_GOSSIP_MESSAGE, creature->GetGUID());
                 break;
             case 903: // Hire Profession Trainers
                 // TODO: entries should be lookups from DB
@@ -351,7 +350,7 @@ public:
                     AddGossipItemFor(player, GOSSIP_ICON_TRAINER, "All Inscription Trainers hired", GOSSIP_SENDER_MAIN, 909);
 
                 AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Go Back!", GOSSIP_SENDER_MAIN, 909);
-                SendGossipMenuFor(player, DEFAULT_GOSSIP_MESSAGE, m_creature->GetGUID());
+                SendGossipMenuFor(player, DEFAULT_GOSSIP_MESSAGE, creature->GetGUID());
                 break;
             case 904: // Secondary Profession Trainers
                 ClearGossipMenuFor(player);
@@ -419,7 +418,7 @@ public:
                     AddGossipItemFor(player, GOSSIP_ICON_TRAINER, "All Cooking Trainers hired", GOSSIP_SENDER_MAIN, 909);
 
                 AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Go Back!", GOSSIP_SENDER_MAIN, 909);
-                SendGossipMenuFor(player, DEFAULT_GOSSIP_MESSAGE, m_creature->GetGUID());
+                SendGossipMenuFor(player, DEFAULT_GOSSIP_MESSAGE, creature->GetGUID());
                 break;
             case 905: // Vendors
                 ClearGossipMenuFor(player);
@@ -452,7 +451,7 @@ public:
                     AddGossipItemFor(player, GOSSIP_ICON_MONEY_BAG, "Fishing Supplies", GOSSIP_SENDER_MAIN, 55, "Hire Fishing Supplies Vendor?", GuildHouseVendor, false);
                 }
                 AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Go Back!", GOSSIP_SENDER_MAIN, 909);
-                SendGossipMenuFor(player, DEFAULT_GOSSIP_MESSAGE, m_creature->GetGUID());
+                SendGossipMenuFor(player, DEFAULT_GOSSIP_MESSAGE, creature->GetGUID());
                 break;
             case 906: // Other Services
                 ClearGossipMenuFor(player);
@@ -485,7 +484,7 @@ public:
                     AddGossipItemFor(player, GOSSIP_ICON_TALK, "Hire Sprirt Healer", GOSSIP_SENDER_MAIN, 49, "Hire a Spirit Healer?", GuildHouseSpirit, false);
                 }
                 AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Go Back!", GOSSIP_SENDER_MAIN, 909);
-                SendGossipMenuFor(player, DEFAULT_GOSSIP_MESSAGE, m_creature->GetGUID());
+                SendGossipMenuFor(player, DEFAULT_GOSSIP_MESSAGE, creature->GetGUID());
                 break;
             case 907: // Portals
                 ClearGossipMenuFor(player);
@@ -528,7 +527,7 @@ public:
                     AddGossipItemFor(player, GOSSIP_ICON_TAXI, "Portal: Dalaran", GOSSIP_SENDER_MAIN, 44, "Add Dalaran Portal?", GuildHousePortal, false);
 
                 AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Go Back!", GOSSIP_SENDER_MAIN, 909);
-                SendGossipMenuFor(player, DEFAULT_GOSSIP_MESSAGE, m_creature->GetGUID());
+                SendGossipMenuFor(player, DEFAULT_GOSSIP_MESSAGE, creature->GetGUID());
                 break;
             case 908: // Furniture
                 ClearGossipMenuFor(player);
@@ -546,10 +545,10 @@ public:
                 // TODO: Moonwell
 
                 AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Go Back!", GOSSIP_SENDER_MAIN, 909);
-                SendGossipMenuFor(player, DEFAULT_GOSSIP_MESSAGE, m_creature->GetGUID());
+                SendGossipMenuFor(player, DEFAULT_GOSSIP_MESSAGE, creature->GetGUID());
                 break;
             case 909: // Go back!
-                OnGossipHello(player, m_creature);
+                OnGossipHello(player, creature);
                 break;
 
             //
@@ -788,7 +787,7 @@ public:
         return true;
     }
 
-    uint32 GetGuildPhase(Player *player)
+    uint32 GetGuildPhase(Player* player)
     {
         return player->GetGuildId() + 10;
     }
@@ -847,7 +846,6 @@ public:
         player->ModifyMoney(-cost);
         CloseGossipMenuFor(player);
     }
-
 
     void ReplaceNPC(Player* player, uint32 id, uint32 baseid, uint32 cost)
     {
@@ -967,7 +965,7 @@ public:
         if (objectInfo->displayId && !sGameObjectDisplayInfoStore.LookupEntry(objectInfo->displayId))
             return;
 
-        GameObject *object = sObjectMgr->IsGameObjectStaticTransport(objectInfo->entry) ? new StaticTransport() : new GameObject();
+        GameObject* object = sObjectMgr->IsGameObjectStaticTransport(objectInfo->entry) ? new StaticTransport() : new GameObject();
         ObjectGuid::LowType guidLow = player->GetMap()->GenerateLowGuid<HighGuid::GameObject>();
 
         if (!object->Create(guidLow, objectInfo->entry, player->GetMap(), GetGuildPhase(player), posX, posY, posZ, ori, G3D::Quat(), 0, GO_STATE_READY))
