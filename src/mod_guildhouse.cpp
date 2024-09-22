@@ -245,7 +245,9 @@ public:
             // Msg to purchaser and Msg Guild as purchaser
             ChatHandler(player->GetSession()).PSendSysMessage("You have successfully purchased a Guild House");
             player->GetGuild()->BroadcastToGuild(player->GetSession(), false, "We now have a Guild House!", LANG_UNIVERSAL);
-            player->GetGuild()->BroadcastToGuild(player->GetSession(), false, "In chat, type `.guildhouse teleport` or `.gh tele` to meet me there!", LANG_UNIVERSAL);
+            player->GetGuild()->BroadcastToGuild(player->GetSession(), false, "Find Talamortis, the Guild House Manager, in any capital to visit!", LANG_UNIVERSAL);
+            // TODO: Only send this message if teleport enabled.
+//            player->GetGuild()->BroadcastToGuild(player->GetSession(), false, "In chat, type `.guildhouse teleport` or `.gh tele` to meet me there!", LANG_UNIVERSAL);
             LOG_INFO("modules", "GUILDHOUSE: GuildId: '{}' has purchased a guildhouse", player->GetGuildId());
 
             // Spawn a portal and the guild house butler automatically as part of purchase.
@@ -420,15 +422,28 @@ public:
 
     void SpawnButlerNPC(Player* player)
     {
-        uint32 entry = 500031;
-        float posX = 16202.185547f;
-        float posY = 16255.916992f;
-        float posZ = 21.160221f;
-        float ori = 6.195375f;
+        uint32 entry;
+        float posX;
+        float posY;
+        float posZ;
+        float ori;
+
+        QueryResult result = WorldDatabase.Query("SELECT entry, posX, posY, posZ, orientation FROM guild_house_spawns WHERE id = 0");
+
+        if (!result)
+            return;
+
+        Field* fields = result->Fetch();
+        entry = fields[0].Get<float>();
+        posX = fields[1].Get<float>();
+        posY = fields[2].Get<float>();
+        posZ = fields[3].Get<float>();
+        ori = fields[4].Get<float>();
 
         Map* map = sMapMgr->FindMap(1, 0);
         Creature *creature = new Creature();
 
+        // TODO the phase mask isn't working
         if (!creature->Create(map->GenerateLowGuid<HighGuid::Unit>(), map, player->GetPhaseMaskForSpawn(), entry, 0, posX, posY, posZ, ori))
         {
             delete creature;
