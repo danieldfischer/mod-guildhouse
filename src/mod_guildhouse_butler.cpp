@@ -492,39 +492,53 @@ public:
                 if (player->GetTeamId() == TEAM_ALLIANCE)
                 {
                     // ALLIANCE players get these options
-                    if (!player->FindNearestGameObject(190960, VISIBLE_RANGE))
+                    if (!player->FindNearestGameObject(500000, VISIBLE_RANGE))
                         AddGossipItemFor(player, GOSSIP_ICON_TAXI, "Portal: Stormwind", GOSSIP_SENDER_MAIN, 35, "Add Stormwind Portal?", GuildHousePortal, false);
-                    if (!player->FindNearestGameObject(191008, VISIBLE_RANGE))
+                    if (!player->FindNearestGameObject(500003, VISIBLE_RANGE))
                         AddGossipItemFor(player, GOSSIP_ICON_TAXI, "Portal: Ironforge", GOSSIP_SENDER_MAIN, 36, "Add Ironforge Portal?", GuildHousePortal, false);
-                    if (!player->FindNearestGameObject(191006, VISIBLE_RANGE))
+                    if (!player->FindNearestGameObject(500001, VISIBLE_RANGE))
                         AddGossipItemFor(player, GOSSIP_ICON_TAXI, "Portal: Darnassus", GOSSIP_SENDER_MAIN, 37, "Add Darnassus Portal?", GuildHousePortal, false);
-                    if (!player->FindNearestGameObject(191007, VISIBLE_RANGE))
+                    if (!player->FindNearestGameObject(500002, VISIBLE_RANGE))
                         AddGossipItemFor(player, GOSSIP_ICON_TAXI, "Portal: Exodar", GOSSIP_SENDER_MAIN, 38, "Add Exodar Portal?", GuildHousePortal, false);
-                    // TODO: Theramore?
+                    if (!player->FindNearestGameObject(189993, VISIBLE_RANGE))
+                        AddGossipItemFor(player, GOSSIP_ICON_TAXI, "Portal: Theramore", GOSSIP_SENDER_MAIN, 91, "Add Theramore Portal?", GuildHousePortal * 1.5, false);
                 }
                 else
                 {
                     // HORDE players get these options
                     if (!player->FindNearestGameObject(191009, VISIBLE_RANGE))
-                        AddGossipItemFor(player, GOSSIP_ICON_TAXI, "Portal: Orgrimmar", GOSSIP_SENDER_MAIN, 41, "Add Orgrimmar Portal?", GuildHousePortal, false);
+                        AddGossipItemFor(player, GOSSIP_ICON_TAXI, "Portal: Orgrimmar", GOSSIP_SENDER_MAIN, 39, "Add Orgrimmar Portal?", GuildHousePortal, false);
                     if (!player->FindNearestGameObject(191012, VISIBLE_RANGE))
                         AddGossipItemFor(player, GOSSIP_ICON_TAXI, "Portal: Undercity", GOSSIP_SENDER_MAIN, 41, "Add Undercity Portal?", GuildHousePortal, false);
                     if (!player->FindNearestGameObject(191011, VISIBLE_RANGE))
                         AddGossipItemFor(player, GOSSIP_ICON_TAXI, "Portal: Thunderbluff", GOSSIP_SENDER_MAIN, 40, "Add Thunderbuff Portal?", GuildHousePortal, false);
                     if (!player->FindNearestGameObject(191010, VISIBLE_RANGE))
                         AddGossipItemFor(player, GOSSIP_ICON_TAXI, "Portal: Silvermoon", GOSSIP_SENDER_MAIN, 42, "Add Silvermoon Portal?", GuildHousePortal, false);
-                    // TODO: Swamp of sorrows?
+                    if (!player->FindNearestGameObject(189994, VISIBLE_RANGE))
+                        AddGossipItemFor(player, GOSSIP_ICON_TAXI, "Portal: Stonard", GOSSIP_SENDER_MAIN, 92, "Add Stonard Portal?", GuildHousePortal * 1.5, false);
                 }
 
-                // These two portals work for either Team
-                // TODO: Portal to Booty Bay
+                // Neutral portals
+                if (!player->FindNearestGameObject(4441113, VISIBLE_RANGE))
+                    if (player->GetReputationRank(470) < 4)
+                        AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Not enough Ratchet rep for portal!", GOSSIP_SENDER_MAIN, 909);
+                    else
+                        AddGossipItemFor(player, GOSSIP_ICON_TAXI, "Portal: Ratchet", GOSSIP_SENDER_MAIN, 94, "Add Ratchet Portal?", GuildHousePortal * 1.5, false);
+                if (!player->FindNearestGameObject(4441114, VISIBLE_RANGE))
+                    if (player->GetReputationRank(21) < 4)
+                        AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Not enough Booty Bay rep for portal!", GOSSIP_SENDER_MAIN, 909);
+                    else
+                        AddGossipItemFor(player, GOSSIP_ICON_TAXI, "Portal: Booty Bay", GOSSIP_SENDER_MAIN, 95, "Add Booty Bay Portal?", GuildHousePortal * 1.5, false);
                 // TODO: Portal to Gadgetzan
+                // 
                 // TODO: Portal to Winterspring
-                // TODO: Portal to Blasted Lands
+
+                if (!player->FindNearestGameObject(195141, VISIBLE_RANGE) and player->GetLevel() >= 55)
+                    AddGossipItemFor(player, GOSSIP_ICON_TAXI, "Portal: Blasted Lands", GOSSIP_SENDER_MAIN, 93, "Add Blasted Lands Portal?", GuildHousePortal * 1.5, false);
                 if (!player->FindNearestGameObject(500008, VISIBLE_RANGE) and player->GetLevel() >= TBClevel)
-                    AddGossipItemFor(player, GOSSIP_ICON_TAXI, "Portal: Shattrath", GOSSIP_SENDER_MAIN, 43, "Add Shattrath Portal?", GuildHousePortal, false);
+                    AddGossipItemFor(player, GOSSIP_ICON_TAXI, "Portal: Shattrath", GOSSIP_SENDER_MAIN, 43, "Add Shattrath Portal?", GuildHousePortal * TBCrate, false);
                 if (!player->FindNearestGameObject(500009, VISIBLE_RANGE) and player->GetLevel() >= WOTLKlevel)
-                    AddGossipItemFor(player, GOSSIP_ICON_TAXI, "Portal: Dalaran", GOSSIP_SENDER_MAIN, 44, "Add Dalaran Portal?", GuildHousePortal, false);
+                    AddGossipItemFor(player, GOSSIP_ICON_TAXI, "Portal: Dalaran", GOSSIP_SENDER_MAIN, 44, "Add Dalaran Portal?", GuildHousePortal * WOTLKrate, false);
 
                 AddGossipItemFor(player, GOSSIP_ICON_CHAT, "Go Back!", GOSSIP_SENDER_MAIN, 909);
                 SendGossipMenuFor(player, DEFAULT_GOSSIP_MESSAGE, creature->GetGUID());
@@ -771,6 +785,14 @@ public:
             case 41: // Undercity Portal
             case 42: // Silvermoon Portal
                 cost = GuildHousePortal;
+                SpawnObject(player, action, cost);
+                break;
+            case 91: // Theramore Portal
+            case 92: // Stonard Portal
+            case 93: // Blasted Lands Portal
+            case 94: // Ratchet Portal
+            case 95: // Booty Bay Portal
+                cost = GuildHousePortal * 1.5;
                 SpawnObject(player, action, cost);
                 break;
             case 43: // Shattrath Portal
